@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gemini Chatbot | ElecTor</title>
+    <!-- Linking Google Fonts For Icons -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@32,400,0,0" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <!-- App Header -->
+      <header class="app-header">
+        <h1 class="heading">Welcome to ElecTor</h1>
+        <h4 class="sub-heading">Your AI co-pilot for civic duty</h4>
+      </header>
+      <!-- Greeting container -->
+      <div class="greeting-container">
+        <div class="greeting-message">
+          <p class="text">नमस्ते! I am here to assist you with voter registration in India.<br><br>Which language would you prefer?</p>
+          <span class="icon material-symbols-rounded">language</span>
+          <div class="language-buttons">
+            <button class="language-btn" data-lang="en">English</button>
+            <button class="language-btn" data-lang="hi">हिंदी (Hindi)</button>
+          </div>
+        </div>
+      </div>
+      <!-- Chats -->
+      <div class="chats-container"></div>
+      <div class="response"><p><strong>Bot:</strong> <span id="botResponse"></span></p></div>
+      <!-- Prompt Input -->
+      <div class="prompt-container">
+        <div class="prompt-wrapper">
+          <form action="#" class="prompt-form">
+            <input type="text" placeholder="Confused About Voting? Ask Now!" class="prompt-input" id="messageInput" required />
+            <div class="prompt-actions">
+              <!-- File Upload Wrapper -->
+              <div class="file-upload-wrapper">
+                <img src="#" class="file-preview" />
+                <input id="file-input" type="file" accept="image/*, .pdf, .txt, .csv" hidden />
+                <button type="button" class="file-icon material-symbols-rounded">description</button>
+                <button id="cancel-file-btn" type="button" class="material-symbols-rounded">close</button>
+                <button id="add-file-btn" type="button" class="material-symbols-rounded">attach_file</button>
+              </div>
+              <!-- Send Prompt and Stop Response Buttons -->
+              <button id="stop-response-btn" type="button" class="material-symbols-rounded">stop_circle</button>
+              <button id="send-prompt-btn" class="material-symbols-rounded" onclick="sendMessage()">arrow_upward</button>
+            </div>
+          </form>
+          <!-- Theme and Delete Chats Buttons -->
+          <button id="mic-button" class="material-symbols-rounded">mic</button>
+          <button id="theme-toggle-btn" class="material-symbols-rounded">light_mode</button>
+          <button id="delete-chats-btn" class="material-symbols-rounded">delete</button>
+        </div>
+        <p class="disclaimer-text">AI can make mistakes. Kindly confirm the information from real sources.</p>
+      </div>
+    </div>
+    <script>
+        function sendMessage() {
+            const userMessage = document.getElementById('messageInput').value;
+
+            fetch('http://127.0.0.1:8000/chat/api/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ message: userMessage })
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('botResponse').textContent = data.response;
+            })
+            .catch(error => {
+                document.getElementById('botResponse').textContent = 'Error contacting bot.';
+                console.error('Error:', error);
+            });
+        }
+    </script>
+  </body>
+</html>
